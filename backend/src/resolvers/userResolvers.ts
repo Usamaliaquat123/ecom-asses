@@ -78,7 +78,7 @@ export const userResolvers = {
         throw new AuthenticationError('Invalid credentials');
       }
 
-      const token = generateToken(user);
+      const token = generateToken(user.id, user.email, user.role);
 
       return {
         token,
@@ -109,7 +109,7 @@ export const userResolvers = {
         include: { profile: true },
       });
 
-      const token = generateToken(user);
+      const token = generateToken(user.id, user.email, user.role);
 
       return {
         token,

@@ -5,6 +5,9 @@ import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import { PrismaClient } from '@prisma/client'
+import { ApolloServer } from 'apollo-server-express'
+import { createServer } from 'http'
+import jwt from 'jsonwebtoken'
 
 // Import routes
 import authRoutes from './routes/auth'
@@ -18,20 +21,35 @@ import analyticsRoutes from './routes/analytics'
 import { errorHandler } from './middleware/errorHandler'
 import { notFound } from './middleware/notFound'
 
+// Import GraphQL schema and resolvers
+import { typeDefs } from './types/typeDefs'
+import { resolvers } from './resolvers'
+import type { Context } from './types/context'
+
 dotenv.config()
 
 const app = express()
 const prisma = new PrismaClient()
 const PORT = process.env.PORT || 4000
 
+// Create HTTP server
+const httpServer = createServer(app)
+
+
 // Security middleware
-app.use(helmet())
-app.use(cors({
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP for GraphQL Playground
+  crossOriginEmbedderPolicy: false
+}))
+
+const corsOptions = {
   origin: process.env.FRONTEND_URL ? 
     process.env.FRONTEND_URL.split(',') : 
     ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
-}))
+}
+
+app.use(cors(corsOptions))
 
 // Rate limiting
 const limiter = rateLimit({
@@ -71,26 +89,73 @@ app.use('/api/reports', reportRoutes)
 app.use('/api/integrations', integrationRoutes)
 app.use('/api/analytics', analyticsRoutes)
 
-// Error handling middleware
-app.use(notFound)
-app.use(errorHandler)
+// Authentication helper for GraphQL context
+const getUser = async (token: string) => {
+  try {
+    if (!token) return null
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      include: { profile: true }
+    })
+    return user
+  } catch (error) {
+    return null
+  }
+}
 
-// Graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('Received SIGINT, shutting down gracefully...')
-  await prisma.$disconnect()
-  process.exit(0)
+// Create Apollo Server
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async ({ req, res }: { req: any; res: any }): Promise<Context> => {
+    const token = req.headers.authorization?.replace('Bearer ', '')
+    const user = token ? await getUser(token) : null
+    return { prisma, req, res, user }
+  },
+  introspection: true,
 })
 
-process.on('SIGTERM', async () => {
-  console.log('Received SIGTERM, shutting down gracefully...')
-  await prisma.$disconnect()
-  process.exit(0)
-})
+// Start server
+async function startServer() {
+  await server.start()
+  
+  // Apply GraphQL middleware
+  server.applyMiddleware({ 
+    app, 
+    path: '/graphql',
+    cors: corsOptions
+  })
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-  console.log(`📊 Health check: http://localhost:${PORT}/health`)
+  // Error handling middleware (after GraphQL)
+  app.use(notFound)
+  app.use(errorHandler)
+
+  // Graceful shutdown
+  process.on('SIGINT', async () => {
+    console.log('Received SIGINT, shutting down gracefully...')
+    await server.stop()
+    await prisma.$disconnect()
+    process.exit(0)
+  })
+
+  process.on('SIGTERM', async () => {
+    console.log('Received SIGTERM, shutting down gracefully...')
+    await server.stop()
+    await prisma.$disconnect()
+    process.exit(0)
+  })
+
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`)
+    console.log(`📊 Health check: http://localhost:${PORT}/health`)
+    console.log(`🎯 GraphQL endpoint: http://localhost:${PORT}${server.graphqlPath}`)
+  })
+}
+
+startServer().catch((error) => {
+  console.error('Failed to start server:', error)
+  process.exit(1)
 })
 
 export default app

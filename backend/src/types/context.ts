@@ -5,7 +5,7 @@ export interface Context {
   prisma: PrismaClient;
   req: Request;
   res: Response;
-  user?: User;
+  user?: User & { profile?: any } | null;
 }
 
 

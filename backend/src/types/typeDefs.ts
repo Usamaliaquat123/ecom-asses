@@ -7,7 +7,7 @@ export const typeDefs = gql`
   enum UserRole {
     ADMIN
     USER
-    MANAGER
+    MODERATOR
   }
 
   enum ReportStatus {
@@ -17,6 +17,14 @@ export const typeDefs = gql`
     FAILED
   }
 
+  enum ReportType {
+    SALES
+    USERS
+    ANALYTICS
+    INVENTORY
+  }
+
+  # Core User Types
   type User {
     id: ID!
     email: String!
@@ -32,10 +40,13 @@ export const typeDefs = gql`
     lastName: String
     avatar: String
     phone: String
+    address: String
+    isActive: Boolean!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
 
+  # Analytics Types
   type SalesMetric {
     id: ID!
     date: DateTime!
@@ -68,6 +79,7 @@ export const typeDefs = gql`
     createdAt: DateTime!
   }
 
+  # Required Analytics Type
   type Analytics {
     salesData: [SalesMetric!]!
     customerMetrics: CustomerMetrics!
@@ -77,9 +89,11 @@ export const typeDefs = gql`
     averageOrderValue: Decimal!
   }
 
+  # Report Types
   type Report {
     id: ID!
     title: String!
+    type: ReportType!
     generatedBy: User!
     filePath: String
     status: ReportStatus!
@@ -87,6 +101,7 @@ export const typeDefs = gql`
     updatedAt: DateTime!
   }
 
+  # Input Types
   input UserFilter {
     role: UserRole
     email: String
@@ -116,6 +131,8 @@ export const typeDefs = gql`
     lastName: String
     avatar: String
     phone: String
+    address: String
+    isActive: Boolean
   }
 
   input AnalyticsInput {
@@ -126,67 +143,7 @@ export const typeDefs = gql`
 
   input ReportInput {
     title: String!
-    type: String!
-  }
-
-  type UserConnection {
-    nodes: [User!]!
-    totalCount: Int!
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-  }
-
-  type AuthPayload {
-    token: String!
-    user: User!
-  }
-
-  type Query {
-    # User queries
-    users(filter: UserFilter, pagination: Pagination): UserConnection!
-    user(id: ID!): User
-    me: User
-
-    # Analytics queries
-    analytics(dateRange: DateRange!): Analytics!
-    salesMetrics(dateRange: DateRange!, channel: String): [SalesMetric!]!
-    customerMetrics(dateRange: DateRange!): CustomerMetrics!
-    inventoryItems(category: String, lowStock: Boolean): [InventoryItem!]!
-
-    # Report queries
-    reports(type: String): [Report!]!
-    report(id: ID!): Report
-  }
-
-  type Mutation {
-    # Auth mutations
-    login(email: String!, password: String!): AuthPayload!
-    register(input: CreateUserInput!): AuthPayload!
-
-    # User mutations
-    createUser(input: CreateUserInput!): User!
-    updateUser(id: ID!, input: CreateUserInput!): User!
-    deleteUser(id: ID!): Boolean!
-
-    # Analytics mutations
-    updateAnalytics(input: AnalyticsInput!): Analytics!
-    addSalesMetric(input: SalesMetricInput!): SalesMetric!
-    updateInventoryItem(id: ID!, input: InventoryItemInput!): InventoryItem!
-
-    # Report mutations
-    generateReport(input: ReportInput!): Report!
-    deleteReport(id: ID!): Boolean!
-  }
-
-  type Subscription {
-    # Real-time analytics updates
-    analyticsUpdated: Analytics!
-    salesMetricAdded: SalesMetric!
-    inventoryUpdated: InventoryItem!
-
-    # User status updates
-    userStatusChanged(userId: ID!): User!
-    reportStatusChanged(reportId: ID!): Report!
+    type: ReportType!
   }
 
   input SalesMetricInput {
@@ -206,5 +163,73 @@ export const typeDefs = gql`
     price: Decimal
     cost: Decimal
     supplier: String
+  }
+
+  # Connection Types
+  type UserConnection {
+    nodes: [User!]!
+    totalCount: Int!
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+  }
+
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
+  # Required Query Type
+  type Query {
+    # Core required queries
+    users(filter: UserFilter, pagination: Pagination): UserConnection!
+    analytics(dateRange: DateRange!): Analytics!
+    reports(type: ReportType!): [Report!]!
+    
+    # Additional user queries
+    user(id: ID!): User
+    me: User
+
+    # Additional analytics queries
+    salesMetrics(dateRange: DateRange!, channel: String): [SalesMetric!]!
+    customerMetrics(dateRange: DateRange!): CustomerMetrics!
+    inventoryItems(category: String, lowStock: Boolean): [InventoryItem!]!
+
+    # Additional report queries
+    report(id: ID!): Report
+  }
+
+  # Required Mutation Type
+  type Mutation {
+    # Core required mutations
+    createUser(input: CreateUserInput!): User!
+    updateAnalytics(input: AnalyticsInput!): Analytics!
+    generateReport(input: ReportInput!): Report!
+
+    # Auth mutations
+    login(email: String!, password: String!): AuthPayload!
+    register(input: CreateUserInput!): AuthPayload!
+
+    # Additional user mutations
+    updateUser(id: ID!, input: CreateUserInput!): User!
+    deleteUser(id: ID!): Boolean!
+
+    # Additional analytics mutations
+    addSalesMetric(input: SalesMetricInput!): SalesMetric!
+    updateInventoryItem(id: ID!, input: InventoryItemInput!): InventoryItem!
+
+    # Additional report mutations
+    deleteReport(id: ID!): Boolean!
+  }
+
+  # Required Subscription Type
+  type Subscription {
+    # Core required subscriptions
+    analyticsUpdated: Analytics!
+    userStatusChanged(userId: ID!): User!
+
+    # Additional subscriptions
+    salesMetricAdded: SalesMetric!
+    inventoryUpdated: InventoryItem!
+    reportStatusChanged(reportId: ID!): Report!
   }
 `;
