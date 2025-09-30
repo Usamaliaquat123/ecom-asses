@@ -31,7 +31,7 @@ export interface UpdateUserData {
   lastName?: string
   phone?: string
   address?: string
-  role?: 'admin' | 'moderator' | 'user'
+  role?: 'ADMIN' | 'MODERATOR' | 'USER'
   isActive?: boolean
   status?: 'active' | 'inactive'
   password?: string

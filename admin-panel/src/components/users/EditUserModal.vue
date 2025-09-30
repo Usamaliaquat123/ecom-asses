@@ -3,8 +3,8 @@ import { ref, computed, watch } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { X, User, Mail, Phone, MapPin, Shield, Eye, EyeOff, UserCheck, Loader2 } from 'lucide-vue-next'
-import type { User as UserType, UpdateUserData } from '@/types'
-import { apiService } from '@/services/api'
+import type { User as UserType } from '@/types'
+import { apiService, type UpdateUserData } from '@/services/api'
 
 interface Props {
   show: boolean
@@ -13,7 +13,7 @@ interface Props {
 
 interface Emits {
   (e: 'close'): void
-  (e: 'updated', user: UpdateUserData): void
+  (e: 'updated', user: UserType): void
 }
 
 const props = defineProps<Props>()
@@ -42,21 +42,21 @@ const { handleSubmit, resetForm, setValues } = useForm({
     email: '',
     phone: '',
     address: '',
-    role: 'user',
+    role: 'USER',
     password: '',
     status: 'active'
   }
 })
 
 // Individual field validation with better error control
-const { value: firstName, errorMessage: firstNameError, meta: firstNameMeta } = useField('firstName')
-const { value: lastName, errorMessage: lastNameError, meta: lastNameMeta } = useField('lastName')
-const { value: email, errorMessage: emailError, meta: emailMeta } = useField('email')
-const { value: phone, errorMessage: phoneError, meta: phoneMeta } = useField('phone')
-const { value: address, errorMessage: addressError, meta: addressMeta } = useField('address')
-const { value: role, errorMessage: roleError } = useField('role')
-const { value: password, errorMessage: passwordError, meta: passwordMeta } = useField('password')
-const { value: status, errorMessage: statusError } = useField('status')
+const { value: firstName, errorMessage: firstNameError, meta: firstNameMeta } = useField<string>('firstName')
+const { value: lastName, errorMessage: lastNameError, meta: lastNameMeta } = useField<string>('lastName')
+const { value: email, errorMessage: emailError, meta: emailMeta } = useField<string>('email')
+const { value: phone, errorMessage: phoneError, meta: phoneMeta } = useField<string>('phone')
+const { value: address, errorMessage: addressError, meta: addressMeta } = useField<string>('address')
+const { value: role, errorMessage: roleError } = useField<'ADMIN' | 'USER' | 'MODERATOR'>('role')
+const { value: password, errorMessage: passwordError, meta: passwordMeta } = useField<string>('password')
+const { value: status, errorMessage: statusError } = useField<'active' | 'inactive'>('status')
 
 // Show errors only after field has been touched and is invalid
 const showFirstNameError = computed(() => firstNameMeta.touched && firstNameError.value)
@@ -88,7 +88,7 @@ watch(() => props.user, (user) => {
     email.value = user.email || ''
     phone.value = user.phone || ''
     address.value = user.address || ''
-    role.value = user.role || 'user'
+    role.value = user.role || 'USER'
     password.value = ''
     status.value = user.status || 'active'
   }
@@ -106,8 +106,7 @@ const onSubmit = handleSubmit(async (formValues) => {
       email: email.value,
       phone: phone.value,
       address: address.value,
-      role: role.value as 'ADMIN' | 'USER' | 'MODERATOR',
-      status: status.value as 'active' | 'inactive'
+      role: role.value.toLowerCase() as 'admin' | 'moderator' | 'user'
     }
     
     // Only include password if it's provided
@@ -321,7 +320,7 @@ watch(() => props.show, (show) => {
                     <div
                       v-for="roleOption in roles"
                       :key="roleOption.value"
-                      @click="role = roleOption.value"
+                      @click="role = roleOption.value as 'ADMIN' | 'USER' | 'MODERATOR'"
                       class="relative p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md"
                       :class="role === roleOption.value 
                         ? 'border-blue-500 bg-blue-50' 
@@ -357,7 +356,7 @@ watch(() => props.show, (show) => {
                     <div
                       v-for="statusOption in statuses"
                       :key="statusOption.value"
-                      @click="status = statusOption.value"
+                      @click="status = statusOption.value as 'active' | 'inactive'"
                       class="relative p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md"
                       :class="status === statusOption.value 
                         ? 'border-blue-500 bg-blue-50' 
@@ -431,7 +430,7 @@ watch(() => props.show, (show) => {
                 <div class="flex items-center space-x-3">
                   <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
                     <span class="text-white font-semibold text-lg">
-                      {{ (firstName?.[0] || '') + (lastName?.[0] || '') }}
+                      {{ (firstName ? firstName[0] : '') + (lastName ? lastName[0] : '') }}
                     </span>
                   </div>
                   <div>
