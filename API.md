@@ -905,4 +905,3 @@ For issues and questions:
 
 ---
 
-*Last updated: January 2024*
