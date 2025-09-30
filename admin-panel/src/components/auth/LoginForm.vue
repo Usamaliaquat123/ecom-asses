@@ -53,17 +53,17 @@ const togglePasswordVisibility = () => {
 <template>
   <div class="min-h-screen flex">
     <!-- Left Side - Login Form -->
-    <div class="flex-1 flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8">
+    <div class="flex-1 flex items-center justify-center bg-white dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
       <div class="max-w-md w-full space-y-8">
         <!-- Header -->
         <div class="text-center">
           <div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-purple-600 shadow-lg">
             <Shield class="h-8 w-8 text-white" />
           </div>
-          <h2 class="mt-6 text-3xl font-bold text-gray-900">
+          <h2 class="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
             Sign in to Admin Panel
           </h2>
-          <p class="mt-2 text-sm text-gray-600">
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Access your dashboard and manage your system
           </p>
         </div>
@@ -80,7 +80,7 @@ const togglePasswordVisibility = () => {
                 type="email"
                 autocomplete="email"
                 :class="[
-                  'input w-full',
+                  'input w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400',
                   errors.email ? 'border-red-300 focus-visible:ring-red-500' : ''
                 ]"
                 placeholder="Work email"
@@ -100,7 +100,7 @@ const togglePasswordVisibility = () => {
                   :type="showPassword ? 'text' : 'password'"
                   autocomplete="current-password"
                   :class="[
-                    'input w-full pr-10',
+                    'input w-full pr-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400',
                     errors.password ? 'border-red-300 focus-visible:ring-red-500' : ''
                   ]"
                   placeholder="Password"
@@ -110,8 +110,8 @@ const togglePasswordVisibility = () => {
                   @click="togglePasswordVisibility"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
-                  <Eye v-if="!showPassword" class="h-4 w-4 text-gray-400" />
-                  <EyeOff v-else class="h-4 w-4 text-gray-400" />
+                  <Eye v-if="!showPassword" class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                  <EyeOff v-else class="h-4 w-4 text-gray-400 dark:text-gray-500" />
                 </button>
               </div>
               <p v-if="errors.password" class="mt-1 text-sm text-red-600">
@@ -120,8 +120,8 @@ const togglePasswordVisibility = () => {
             </div>
 
             <!-- Error Message -->
-            <div v-if="loginError" class="p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p class="text-sm text-red-600">{{ loginError }}</p>
+            <div v-if="loginError" class="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p class="text-sm text-red-600 dark:text-red-400">{{ loginError }}</p>
             </div>
 
             <!-- Login button -->
@@ -140,18 +140,18 @@ const togglePasswordVisibility = () => {
      
 
           <!-- Footer Links -->
-          <div class="flex items-center justify-center space-x-6 text-xs text-gray-500">
-            <a href="#" class="hover:text-gray-700">Privacy Policy</a>
-            <a href="#" class="hover:text-gray-700">Terms of Service</a>
-            <a href="#" class="hover:text-gray-700">Privacy & Security</a>
+          <div class="flex items-center justify-center space-x-6 text-xs text-gray-500 dark:text-gray-400">
+            <a href="#" class="hover:text-gray-700 dark:hover:text-gray-300">Privacy Policy</a>
+            <a href="#" class="hover:text-gray-700 dark:hover:text-gray-300">Terms of Service</a>
+            <a href="#" class="hover:text-gray-700 dark:hover:text-gray-300">Privacy & Security</a>
           </div>
         </div>
 
         <!-- Demo credentials -->
-        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-          <p class="text-xs text-gray-600 mb-2">Demo credentials:</p>
-          <p class="text-xs text-gray-500">Email: admin@example.com</p>
-          <p class="text-xs text-gray-500">Password: password123</p>
+        <div class="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">Demo credentials:</p>
+          <p class="text-xs text-gray-500 dark:text-gray-500">Email: admin@example.com</p>
+          <p class="text-xs text-gray-500 dark:text-gray-500">Password: password123</p>
         </div>
       </div>
     </div>

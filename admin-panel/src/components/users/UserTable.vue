@@ -7,49 +7,16 @@ import type { User } from '@/types'
 interface Props {
   users: User[]
   loading?: boolean
-  selected?: string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  loading: false,
-  selected: () => []
+  loading: false
 })
 
 const emit = defineEmits<{
   edit: [user: User]
   delete: [user: User]
-  'selection-change': [selected: string[]]
 }>()
-
-const selectedUsers = ref<string[]>([...props.selected])
-const selectAll = ref(false)
-
-const isAllSelected = computed(() => {
-  return props.users.length > 0 && selectedUsers.value.length === props.users.length
-})
-
-const isIndeterminate = computed(() => {
-  return selectedUsers.value.length > 0 && selectedUsers.value.length < props.users.length
-})
-
-const toggleSelectAll = () => {
-  if (isAllSelected.value) {
-    selectedUsers.value = []
-  } else {
-    selectedUsers.value = props.users.map(user => user.id)
-  }
-  emit('selection-change', selectedUsers.value)
-}
-
-const toggleUserSelection = (userId: string) => {
-  const index = selectedUsers.value.indexOf(userId)
-  if (index > -1) {
-    selectedUsers.value.splice(index, 1)
-  } else {
-    selectedUsers.value.push(userId)
-  }
-  emit('selection-change', selectedUsers.value)
-}
 
 const formatDate = (dateString: string | null) => {
   if (!dateString) return 'Never'
@@ -58,48 +25,39 @@ const formatDate = (dateString: string | null) => {
 
 const getRoleColor = (role: string) => {
   const colors = {
-    admin: 'bg-red-100 text-red-800',
-    manager: 'bg-blue-100 text-blue-800',
-    user: 'bg-gray-100 text-gray-800'
+    admin: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
+    manager: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300',
+    user: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
   }
   return colors[role as keyof typeof colors] || colors.user
 }
 
 const getStatusColor = (isActive: boolean) => {
   return isActive 
-    ? 'bg-green-100 text-green-800' 
-    : 'bg-gray-100 text-gray-800'
+    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' 
+    : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
 }
 </script>
 
 <template>
   <div class="overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700">
           <tr>
-            <th scope="col" class="relative w-12 px-6 sm:w-16 sm:px-8">
-              <input
-                type="checkbox"
-                :checked="isAllSelected"
-                :indeterminate="isIndeterminate"
-                @change="toggleSelectAll"
-                class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-600 sm:left-6"
-              >
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               User
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Role
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Status
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Last Login
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Created
             </th>
             <th scope="col" class="relative px-6 py-3">
@@ -107,12 +65,9 @@ const getStatusColor = (isActive: boolean) => {
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
           <!-- Loading state -->
           <tr v-if="loading" v-for="i in 5" :key="`loading-${i}`">
-            <td class="px-6 py-4">
-              <div class="animate-pulse h-4 w-4 bg-gray-200 rounded"></div>
-            </td>
             <td class="px-6 py-4">
               <div class="flex items-center">
                 <div class="animate-pulse h-10 w-10 bg-gray-200 rounded-full mr-4"></div>
@@ -141,9 +96,9 @@ const getStatusColor = (isActive: boolean) => {
 
           <!-- Empty state -->
           <tr v-else-if="users.length === 0">
-            <td colspan="7" class="px-6 py-12 text-center">
-              <div class="text-gray-500">
-                <Users class="w-12 h-12 mx-auto mb-4 text-gray-400" />
+            <td colspan="6" class="px-6 py-12 text-center">
+              <div class="text-gray-500 dark:text-gray-400">
+                <Users class="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
                 <p class="text-lg font-medium">No users found</p>
                 <p class="text-sm">Get started by creating a new user.</p>
               </div>
@@ -155,19 +110,8 @@ const getStatusColor = (isActive: boolean) => {
             v-else
             v-for="user in users" 
             :key="user.id"
-            :class="[
-              'hover:bg-gray-50 transition-colors duration-200',
-              selectedUsers.includes(user.id) ? 'bg-purple-50' : ''
-            ]"
+            class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
           >
-            <td class="relative px-6 py-4">
-              <input
-                type="checkbox"
-                :checked="selectedUsers.includes(user.id)"
-                @change="toggleUserSelection(user.id)"
-                class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-600 sm:left-6"
-              >
-            </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="flex items-center">
                 <img 
@@ -176,10 +120,10 @@ const getStatusColor = (isActive: boolean) => {
                   class="h-10 w-10 rounded-full object-cover"
                 >
                 <div class="ml-4">
-                  <div class="text-sm font-medium text-gray-900">
+                  <div class="text-sm font-medium text-gray-900 dark:text-white">
                     {{ user.firstName }} {{ user.lastName }}
                   </div>
-                  <div class="text-sm text-gray-500">{{ user.email }}</div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400">{{ user.email }}</div>
                 </div>
               </div>
             </td>
@@ -193,10 +137,10 @@ const getStatusColor = (isActive: boolean) => {
                 {{ user.isActive ? 'Active' : 'Inactive' }}
               </span>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
               {{ formatDate(user.lastLogin) }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
               {{ formatDate(user.createdAt) }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

@@ -17,7 +17,7 @@ const stats = ref([
     change: '+12%',
     changeType: 'positive' as const,
     icon: Users,
-    color: 'blue'
+    color: 'blue' as const
   },
   {
     title: 'Active Users',
@@ -25,15 +25,15 @@ const stats = ref([
     change: '+8%',
     changeType: 'positive' as const,
     icon: UserCheck,
-    color: 'green'
+    color: 'green' as const
   },
   {
     title: 'Total Roles',
-    value: '5',
+    value: '3',
     change: '+2',
     changeType: 'positive' as const,
     icon: Shield,
-    color: 'purple'
+    color: 'purple' as const
   },
   {
     title: 'System Activity',
@@ -41,7 +41,7 @@ const stats = ref([
     change: '+0.5%',
     changeType: 'positive' as const,
     icon: Activity,
-    color: 'orange'
+    color: 'orange' as const
   }
 ])
 
@@ -81,13 +81,13 @@ onMounted(async () => {
 
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">User Growth</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">User Growth</h3>
         <UserChart />
       </div>
       
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">System Activity</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">System Activity</h3>
         <ActivityChart />
       </div>
     </div>
@@ -98,40 +98,40 @@ onMounted(async () => {
         <RecentUsers />
       </div>
       
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
         <div class="space-y-4">
           <div class="flex items-start space-x-3">
             <div class="flex-shrink-0 w-2 h-2 bg-green-500 rounded-full mt-2"></div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm text-gray-900">New user registered</p>
-              <p class="text-xs text-gray-500">2 minutes ago</p>
+              <p class="text-sm text-gray-900 dark:text-white">New user registered</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">2 minutes ago</p>
             </div>
           </div>
           <div class="flex items-start space-x-3">
             <div class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm text-gray-900">System backup completed</p>
-              <p class="text-xs text-gray-500">1 hour ago</p>
+              <p class="text-sm text-gray-900 dark:text-white">System backup completed</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">1 hour ago</p>
             </div>
           </div>
           <div class="flex items-start space-x-3">
             <div class="flex-shrink-0 w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm text-gray-900">Role permissions updated</p>
-              <p class="text-xs text-gray-500">3 hours ago</p>
+              <p class="text-sm text-gray-900 dark:text-white">Role permissions updated</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">3 hours ago</p>
             </div>
           </div>
           <div class="flex items-start space-x-3">
             <div class="flex-shrink-0 w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm text-gray-900">New admin user created</p>
-              <p class="text-xs text-gray-500">1 day ago</p>
+              <p class="text-sm text-gray-900 dark:text-white">New admin user created</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">1 day ago</p>
             </div>
           </div>
         </div>
         <div class="mt-4">
-          <button class="text-sm text-purple-600 hover:text-purple-700 font-medium">
+          <button class="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
             View all activity
           </button>
         </div>

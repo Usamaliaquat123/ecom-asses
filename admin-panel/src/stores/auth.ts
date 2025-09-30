@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  const isAuthenticated = computed(() => !!token.value && !!user.value)
+  const isAuthenticated = computed(() => !!token.value)
   const userRole = computed(() => user.value?.role || 'user')
 
   const login = async (credentials: LoginCredentials) => {
@@ -22,6 +22,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (response.success && response.data) {
         user.value = response.data.user
         token.value = response.data.token
+        localStorage.setItem('auth_token', response.data.token)
         return { success: true }
       } else {
         throw new Error(response.message || 'Login failed')
@@ -44,6 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       user.value = null
       token.value = null
+      localStorage.removeItem('auth_token')
       error.value = null
       isLoading.value = false
     }
@@ -91,6 +93,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (response.success && response.data) {
         user.value = response.data.user
         token.value = response.data.token
+        localStorage.setItem('auth_token', response.data.token)
         return { success: true }
       } else {
         throw new Error(response.message || 'Registration failed')

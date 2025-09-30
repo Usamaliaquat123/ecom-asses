@@ -62,20 +62,20 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <div class="flex h-full flex-col bg-white shadow-xl">
+  <div class="flex h-full flex-col bg-white dark:bg-gray-800 shadow-xl">
     <!-- Header -->
-    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
       <div class="flex items-center space-x-3">
         <div class="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
           <Shield class="w-5 h-5 text-white" />
         </div>
-        <h1 class="text-xl font-bold text-gray-900">Admin Panel</h1>
+        <h1 class="text-xl font-bold text-gray-900 dark:text-white">Admin Panel</h1>
       </div>
       
       <!-- Mobile close button -->
       <button
         @click="emit('close')"
-        class="lg:hidden p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+        class="lg:hidden p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
       >
         <X class="w-5 h-5" />
       </button>
@@ -89,22 +89,22 @@ const handleLogout = () => {
         @click="handleNavigation(item.href)"
         class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-xl cursor-pointer transition-all duration-200"
         :class="item.current.value
-          ? 'bg-purple-50 text-purple-700 border-r-2 border-purple-600'
-          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
+          ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border-r-2 border-purple-600 dark:border-purple-400'
+          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'"
       >
         <component
           :is="item.icon"
           class="mr-3 h-5 w-5 flex-shrink-0 transition-colors"
           :class="item.current.value
-            ? 'text-purple-600'
-            : 'text-gray-400 group-hover:text-gray-500'"
+            ? 'text-purple-600 dark:text-purple-400'
+            : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400'"
         />
         {{ item.name }}
       </div>
     </nav>
 
     <!-- User Profile & Logout -->
-    <div class="border-t border-gray-200 p-4">
+    <div class="border-t border-gray-200 dark:border-gray-700 p-4">
       <!-- User Info -->
       <div class="flex items-center space-x-3 px-3 py-2 mb-3">
         <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
@@ -113,10 +113,10 @@ const handleLogout = () => {
           </span>
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-gray-900 truncate">
+          <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
             {{ authStore.user?.firstName }} {{ authStore.user?.lastName }} || 'Admin User'
           </p>
-          <p class="text-xs text-gray-500 truncate">
+          <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
             {{ authStore.user?.role?.charAt(0).toUpperCase() + authStore.user?.role?.slice(1) || 'Admin' }}
           </p>
         </div>
@@ -125,9 +125,9 @@ const handleLogout = () => {
       <!-- Logout Button -->
       <button
         @click="handleLogout"
-        class="w-full flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-all duration-200 group"
+        class="w-full flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-400 rounded-xl transition-all duration-200 group"
       >
-        <LogOut class="mr-3 h-5 w-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+        <LogOut class="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors" />
         Sign out
       </button>
     </div>

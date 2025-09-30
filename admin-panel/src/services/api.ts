@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
+import type { User } from '@/types'
 
 // Types
 export interface ApiResponse<T = any> {
@@ -23,19 +24,6 @@ export interface RegisterData {
   role?: 'ADMIN' | 'USER' | 'MODERATOR'
 }
 
-export interface User {
-  id: number
-  email: string
-  role: string
-  firstName?: string
-  lastName?: string
-  phone?: string
-  address?: string
-  isActive?: boolean
-  status?: 'active' | 'inactive'
-  createdAt: string
-  updatedAt: string
-}
 
 export interface CreateUserData {
   email: string
@@ -252,7 +240,7 @@ class ApiService {
     }
   }
 
-  async updateUser(id: number, userData: Partial<UpdateUserData>): Promise<ApiResponse<{ user: User }>> {
+  async updateUser(id: string | number, userData: Partial<UpdateUserData>): Promise<ApiResponse<{ user: User }>> {
     try {
       const response = await this.api.put(`/users/${id}`, userData)
       return response.data
@@ -261,12 +249,35 @@ class ApiService {
     }
   }
 
-  async deleteUser(id: number): Promise<ApiResponse> {
+  async deleteUser(id: string | number): Promise<ApiResponse> {
     try {
       const response = await this.api.delete(`/users/${id}`)
       return response.data
     } catch (error: any) {
       throw error.response?.data || { success: false, message: 'Failed to delete user' }
+    }
+  }
+
+  async exportUsers(format: 'csv' | 'xlsx' = 'csv', filters?: {
+    search?: string
+    role?: string
+    status?: string
+    fields?: string[]
+  }): Promise<Blob> {
+    try {
+      const params = new URLSearchParams()
+      if (filters?.search) params.append('search', filters.search)
+      if (filters?.role) params.append('role', filters.role)
+      if (filters?.status) params.append('status', filters.status)
+      if (filters?.fields) params.append('fields', filters.fields.join(','))
+      
+      const response = await this.api.get(`/users/export/${format}?${params.toString()}`, {
+        responseType: 'blob'
+      })
+      
+      return response.data
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Failed to export users' }
     }
   }
 

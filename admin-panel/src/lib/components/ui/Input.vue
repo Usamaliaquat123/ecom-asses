@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-1">
-    <label v-if="label" :for="id" class="block text-sm font-medium text-gray-700">
+    <label v-if="label" :for="id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
     </label>
@@ -35,7 +35,7 @@
       {{ error }}
     </p>
     
-    <p v-if="hint && !error" class="text-sm text-gray-500">
+    <p v-if="hint && !error" class="text-sm text-gray-500 dark:text-gray-400">
       {{ hint }}
     </p>
   </div>
@@ -72,7 +72,7 @@ defineEmits<{
 }>()
 
 const inputClasses = computed(() => {
-  const baseClasses = 'block w-full rounded-xl border-gray-300 shadow-sm transition-colors duration-200 focus:border-purple-500 focus:ring-purple-500 disabled:bg-gray-50 disabled:text-gray-500'
+  const baseClasses = 'block w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm transition-colors duration-200 focus:border-purple-500 focus:ring-purple-500 disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-400'
   
   const sizeClasses = {
     sm: 'px-3 py-2 text-sm',

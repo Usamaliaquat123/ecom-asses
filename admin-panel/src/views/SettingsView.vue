@@ -89,8 +89,8 @@ const onSubmit = handleSubmit(async (values) => {
   <div class="space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-2xl font-bold text-gray-900">System Settings</h1>
-      <p class="mt-1 text-sm text-gray-500">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">System Settings</h1>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
         Configure system-wide settings and preferences
       </p>
     </div>
@@ -98,7 +98,7 @@ const onSubmit = handleSubmit(async (values) => {
     <div class="flex flex-col lg:flex-row gap-8">
       <!-- Sidebar Navigation -->
       <div class="lg:w-64 flex-shrink-0">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-2">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-2">
           <nav class="space-y-1">
             <button
               v-for="tab in tabs"
@@ -107,8 +107,8 @@ const onSubmit = handleSubmit(async (values) => {
               :class="[
                 'w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors',
                 activeTab === tab.id
-                  ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-700'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               ]"
             >
               <component :is="tab.icon" class="w-5 h-5 mr-3" />
@@ -120,26 +120,26 @@ const onSubmit = handleSubmit(async (values) => {
 
       <!-- Main Content -->
       <div class="flex-1">
-        <div v-if="isLoading" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <div v-if="isLoading" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
           <div class="animate-pulse space-y-6">
-            <div class="h-6 bg-gray-200 rounded w-1/4"></div>
+            <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
             <div class="space-y-4">
-              <div class="h-10 bg-gray-200 rounded"></div>
-              <div class="h-10 bg-gray-200 rounded"></div>
-              <div class="h-10 bg-gray-200 rounded"></div>
+              <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
             </div>
           </div>
         </div>
 
-        <form v-else @submit="onSubmit" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <form v-else @submit="onSubmit" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
           <!-- General Settings -->
           <div v-if="activeTab === 'general'" class="space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-6">General Settings</h3>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">General Settings</h3>
               
               <div class="space-y-6">
                 <div>
-                  <label for="siteName" class="block text-sm font-medium text-gray-700 mb-2">
+                  <label for="siteName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Site Name <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -159,7 +159,7 @@ const onSubmit = handleSubmit(async (values) => {
                 </div>
 
                 <div>
-                  <label for="siteDescription" class="block text-sm font-medium text-gray-700 mb-2">
+                  <label for="siteDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Site Description <span class="text-red-500">*</span>
                   </label>
                   <textarea
@@ -181,8 +181,8 @@ const onSubmit = handleSubmit(async (values) => {
                 <div class="space-y-4">
                   <div class="flex items-center justify-between">
                     <div>
-                      <label class="text-sm font-medium text-gray-900">Allow User Registration</label>
-                      <p class="text-sm text-gray-500">Allow new users to register accounts</p>
+                      <label class="text-sm font-medium text-gray-900 dark:text-white">Allow User Registration</label>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Allow new users to register accounts</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                       <input
@@ -197,8 +197,8 @@ const onSubmit = handleSubmit(async (values) => {
 
                   <div class="flex items-center justify-between">
                     <div>
-                      <label class="text-sm font-medium text-gray-900">Require Email Verification</label>
-                      <p class="text-sm text-gray-500">Require users to verify their email address</p>
+                      <label class="text-sm font-medium text-gray-900 dark:text-white">Require Email Verification</label>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Require users to verify their email address</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                       <input
@@ -213,8 +213,8 @@ const onSubmit = handleSubmit(async (values) => {
 
                   <div class="flex items-center justify-between">
                     <div>
-                      <label class="text-sm font-medium text-gray-900">Maintenance Mode</label>
-                      <p class="text-sm text-gray-500">Put the system in maintenance mode</p>
+                      <label class="text-sm font-medium text-gray-900 dark:text-white">Maintenance Mode</label>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Put the system in maintenance mode</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                       <input
@@ -234,12 +234,12 @@ const onSubmit = handleSubmit(async (values) => {
           <!-- Security Settings -->
           <div v-if="activeTab === 'security'" class="space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-6">Security Settings</h3>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Security Settings</h3>
               
               <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label for="sessionTimeout" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="sessionTimeout" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Session Timeout (minutes) <span class="text-red-500">*</span>
                     </label>
                     <input
@@ -260,7 +260,7 @@ const onSubmit = handleSubmit(async (values) => {
                   </div>
 
                   <div>
-                    <label for="maxLoginAttempts" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="maxLoginAttempts" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Max Login Attempts <span class="text-red-500">*</span>
                     </label>
                     <input
@@ -282,7 +282,7 @@ const onSubmit = handleSubmit(async (values) => {
                 </div>
 
                 <div>
-                  <label for="passwordMinLength" class="block text-sm font-medium text-gray-700 mb-2">
+                  <label for="passwordMinLength" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Password Minimum Length <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -305,8 +305,8 @@ const onSubmit = handleSubmit(async (values) => {
                 <div class="space-y-4">
                   <div class="flex items-center justify-between">
                     <div>
-                      <label class="text-sm font-medium text-gray-900">Require Special Characters</label>
-                      <p class="text-sm text-gray-500">Require special characters in passwords</p>
+                      <label class="text-sm font-medium text-gray-900 dark:text-white">Require Special Characters</label>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Require special characters in passwords</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                       <input
@@ -321,8 +321,8 @@ const onSubmit = handleSubmit(async (values) => {
 
                   <div class="flex items-center justify-between">
                     <div>
-                      <label class="text-sm font-medium text-gray-900">Enable Two-Factor Authentication</label>
-                      <p class="text-sm text-gray-500">Require 2FA for all users</p>
+                      <label class="text-sm font-medium text-gray-900 dark:text-white">Enable Two-Factor Authentication</label>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Require 2FA for all users</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                       <input
@@ -342,27 +342,27 @@ const onSubmit = handleSubmit(async (values) => {
           <!-- Other tabs content would go here -->
           <div v-if="activeTab === 'notifications'" class="space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-6">Notification Settings</h3>
-              <p class="text-gray-500">Notification settings will be implemented here.</p>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Notification Settings</h3>
+              <p class="text-gray-500 dark:text-gray-400">Notification settings will be implemented here.</p>
             </div>
           </div>
 
           <div v-if="activeTab === 'appearance'" class="space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-6">Appearance Settings</h3>
-              <p class="text-gray-500">Appearance settings will be implemented here.</p>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Appearance Settings</h3>
+              <p class="text-gray-500 dark:text-gray-400">Appearance settings will be implemented here.</p>
             </div>
           </div>
 
           <div v-if="activeTab === 'localization'" class="space-y-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-6">Localization Settings</h3>
-              <p class="text-gray-500">Localization settings will be implemented here.</p>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Localization Settings</h3>
+              <p class="text-gray-500 dark:text-gray-400">Localization settings will be implemented here.</p>
             </div>
           </div>
 
           <!-- Form Actions -->
-          <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 mt-8">
+          <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700 mt-8">
             <button
               type="submit"
               :disabled="isSaving"

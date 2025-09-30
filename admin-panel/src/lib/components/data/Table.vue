@@ -1,9 +1,9 @@
 <template>
   <div class="overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <!-- Header -->
-        <thead class="bg-gray-50">
+        <thead class="bg-gray-50 dark:bg-gray-800">
           <tr>
             <th
               v-for="column in columns"
@@ -39,7 +39,7 @@
         </thead>
         
         <!-- Body -->
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
           <tr
             v-for="(item, index) in data"
             :key="getRowKey(item, index)"
@@ -64,10 +64,10 @@
           
           <!-- Empty State -->
           <tr v-if="data.length === 0">
-            <td :colspan="columns.length" class="px-6 py-12 text-center text-gray-500">
+            <td :colspan="columns.length" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
               <slot name="empty">
                 <div class="flex flex-col items-center space-y-2">
-                  <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-12 h-12 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8l-4 4m0 0l-4-4m4 4V3" />
                   </svg>
                   <p class="text-sm">{{ emptyText || 'No data available' }}</p>
@@ -115,8 +115,8 @@ const emit = defineEmits<{
 }>()
 
 const getHeaderClasses = (column: Column) => {
-  const baseClasses = 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
-  const sortableClasses = column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
+  const baseClasses = 'px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'
+  const sortableClasses = column.sortable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700' : ''
   const alignClasses = {
     left: 'text-left',
     center: 'text-center',
@@ -131,7 +131,7 @@ const getHeaderClasses = (column: Column) => {
 }
 
 const getCellClasses = (column: Column) => {
-  const baseClasses = 'px-6 py-4 whitespace-nowrap text-sm'
+  const baseClasses = 'px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white'
   const alignClasses = {
     left: 'text-left',
     center: 'text-center',
@@ -143,15 +143,15 @@ const getCellClasses = (column: Column) => {
 
 const getRowClasses = (item: any, index: number) => {
   const baseClasses = ''
-  const hoverClasses = props.hoverable ? 'hover:bg-gray-50 cursor-pointer' : ''
-  const stripedClasses = props.striped && index % 2 === 1 ? 'bg-gray-50' : ''
+  const hoverClasses = props.hoverable ? 'hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer' : ''
+  const stripedClasses = props.striped && index % 2 === 1 ? 'bg-gray-50 dark:bg-gray-700' : ''
   
   return [baseClasses, hoverClasses, stripedClasses].filter(Boolean).join(' ')
 }
 
 const getSortIconClasses = (column: Column, direction: 'asc' | 'desc') => {
   const isActive = props.sortBy === column.key && props.sortOrder === direction
-  return isActive ? 'text-purple-600' : 'text-gray-300'
+  return isActive ? 'text-purple-600 dark:text-purple-400' : 'text-gray-300 dark:text-gray-600'
 }
 
 const getRowKey = (item: any, index: number) => {

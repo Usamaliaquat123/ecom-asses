@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed, readonly } from 'vue'
 import { apiService } from '@/services/api'
-import type { User, CreateUserData, UpdateUserData } from '@/services/api'
+import type { CreateUserData, UpdateUserData } from '@/services/api'
+import type { User } from '@/types'
 
 interface UserFilters {
   search: string
@@ -35,7 +36,7 @@ export const useUsersStore = defineStore('users', () => {
       lastName: 'Doe',
       phone: '+1-555-0123',
       address: '123 Admin Street, New York, NY 10001',
-      role: 'admin',
+      role: 'ADMIN',
       permissions: ['read', 'write', 'delete', 'manage_users'],
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
       isActive: true,
@@ -50,7 +51,7 @@ export const useUsersStore = defineStore('users', () => {
       lastName: 'Johnson',
       phone: '+1-555-0456',
       address: '456 Moderator Ave, Los Angeles, CA 90210',
-      role: 'moderator',
+      role: 'MODERATOR',
       permissions: ['read', 'write'],
       avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       isActive: true,
@@ -65,7 +66,7 @@ export const useUsersStore = defineStore('users', () => {
       lastName: 'Chen',
       phone: '+1-555-0789',
       address: '789 User Blvd, Chicago, IL 60601',
-      role: 'user',
+      role: 'USER',
       permissions: ['read'],
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
       isActive: false,
@@ -81,8 +82,8 @@ export const useUsersStore = defineStore('users', () => {
     if (filters.value.search) {
       const search = filters.value.search.toLowerCase()
       filtered = filtered.filter(user => 
-        user.firstName.toLowerCase().includes(search) ||
-        user.lastName.toLowerCase().includes(search) ||
+        (user.firstName?.toLowerCase() || '').includes(search) ||
+        (user.lastName?.toLowerCase() || '').includes(search) ||
         user.email.toLowerCase().includes(search)
       )
     }
@@ -176,7 +177,7 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
-  const updateUser = async (id: number, userData: Partial<UpdateUserData>) => {
+  const updateUser = async (id: string | number, userData: Partial<UpdateUserData>) => {
     isLoading.value = true
     error.value = null
     
@@ -202,7 +203,7 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
-  const deleteUser = async (id: number) => {
+  const deleteUser = async (id: string | number) => {
     isLoading.value = true
     error.value = null
     
@@ -229,7 +230,7 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
-  const getUserById = (id: number) => {
+  const getUserById = (id: string | number) => {
     return users.value.find(user => user.id === id)
   }
 
@@ -245,6 +246,52 @@ export const useUsersStore = defineStore('users', () => {
   const setItemsPerPage = (items: number) => {
     itemsPerPage.value = items
     currentPage.value = 1
+  }
+
+  const exportUsers = async (format: 'csv' | 'xlsx' = 'csv', useServerExport: boolean = false) => {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      if (useServerExport) {
+        // Use server-side export
+        const blob = await apiService.exportUsers(format, {
+          search: filters.value.search,
+          role: filters.value.role,
+          status: filters.value.status
+        })
+        
+        // Create download link
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        
+        const timestamp = new Date().toISOString().split('T')[0]
+        link.download = `users-export-${timestamp}.${format}`
+        
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+        
+        return { success: true }
+      } else {
+        // Use client-side export with current filtered users
+        const { exportUsersToCSV } = await import('@/utils/csvExport')
+        const timestamp = new Date().toISOString().split('T')[0]
+        
+        exportUsersToCSV(filteredUsers.value, {
+          filename: `users-export-${timestamp}.csv`
+        })
+        
+        return { success: true }
+      }
+    } catch (err: any) {
+      error.value = err.message || 'Failed to export users'
+      return { success: false, error: error.value }
+    } finally {
+      isLoading.value = false
+    }
   }
 
   return {
@@ -265,6 +312,7 @@ export const useUsersStore = defineStore('users', () => {
     getUserById,
     updateFilters,
     setPage,
-    setItemsPerPage
+    setItemsPerPage,
+    exportUsers
   }
 })

@@ -3,10 +3,10 @@
     <!-- Header -->
     <div v-if="$slots.header || title" :class="headerClasses">
       <slot name="header">
-        <h3 v-if="title" class="text-lg font-semibold text-gray-900">
+        <h3 v-if="title" class="text-lg font-semibold text-gray-900 dark:text-white">
           {{ title }}
         </h3>
-        <p v-if="subtitle" class="text-sm text-gray-600">
+        <p v-if="subtitle" class="text-sm text-gray-600 dark:text-gray-400">
           {{ subtitle }}
         </p>
       </slot>
@@ -42,21 +42,21 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const cardClasses = computed(() => {
-  const baseClasses = 'bg-white rounded-2xl transition-all duration-200'
+  const baseClasses = 'bg-white dark:bg-gray-800 rounded-2xl transition-all duration-200'
   
   const variantClasses = {
-    default: 'border border-gray-200',
-    outlined: 'border-2 border-gray-200',
-    elevated: 'shadow-lg border border-gray-100'
+    default: 'border border-gray-200 dark:border-gray-700',
+    outlined: 'border-2 border-gray-200 dark:border-gray-700',
+    elevated: 'shadow-lg border border-gray-100 dark:border-gray-700'
   }
   
-  const hoverClasses = props.hover ? 'hover:shadow-md hover:border-gray-300' : ''
+  const hoverClasses = props.hover ? 'hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600' : ''
   
   return [baseClasses, variantClasses[props.variant], hoverClasses].filter(Boolean).join(' ')
 })
 
 const headerClasses = computed(() => {
-  const baseClasses = 'border-b border-gray-200'
+  const baseClasses = 'border-b border-gray-200 dark:border-gray-700'
   
   const paddingClasses = {
     none: 'p-0',
@@ -80,7 +80,7 @@ const bodyClasses = computed(() => {
 })
 
 const footerClasses = computed(() => {
-  const baseClasses = 'border-t border-gray-200'
+  const baseClasses = 'border-t border-gray-200 dark:border-gray-700'
   
   const paddingClasses = {
     none: 'p-0',

@@ -4,6 +4,7 @@ import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { X, User, Mail, Phone, MapPin, Shield, Eye, EyeOff, UserCheck, Loader2 } from 'lucide-vue-next'
 import type { User as UserType, UpdateUserData } from '@/types'
+import { apiService } from '@/services/api'
 
 interface Props {
   show: boolean
@@ -28,7 +29,7 @@ const schema = yup.object({
   email: yup.string().required('Email is required').email('Please enter a valid email'),
   phone: yup.string().required('Phone number is required').matches(/^[\+]?[1-9][\d]{0,15}$/, 'Please enter a valid phone number'),
   address: yup.string().required('Address is required').min(5, 'Address must be at least 5 characters'),
-  role: yup.string().required('Role is required').oneOf(['admin', 'user', 'moderator'], 'Please select a valid role'),
+  role: yup.string().required('Role is required').oneOf(['ADMIN', 'USER', 'MODERATOR'], 'Please select a valid role'),
   password: yup.string().min(8, 'Password must be at least 8 characters').nullable(),
   status: yup.string().required('Status is required').oneOf(['active', 'inactive'], 'Please select a valid status')
 })
@@ -66,9 +67,9 @@ const showAddressError = computed(() => addressMeta.touched && addressError.valu
 const showPasswordError = computed(() => passwordMeta.touched && passwordError.value)
 
 const roles = [
-  { value: 'admin', label: 'Administrator', description: 'Full system access', color: 'bg-red-100 text-red-800' },
-  { value: 'moderator', label: 'Moderator', description: 'Content management', color: 'bg-yellow-100 text-yellow-800' },
-  { value: 'user', label: 'User', description: 'Standard access', color: 'bg-green-100 text-green-800' }
+  { value: 'ADMIN', label: 'Administrator', description: 'Full system access', color: 'bg-red-100 text-red-800' },
+  { value: 'MODERATOR', label: 'Moderator', description: 'Content management', color: 'bg-yellow-100 text-yellow-800' },
+  { value: 'USER', label: 'User', description: 'Standard access', color: 'bg-green-100 text-green-800' }
 ]
 
 const statuses = [
@@ -99,17 +100,13 @@ const onSubmit = handleSubmit(async (formValues) => {
   isLoading.value = true
   
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    const userData: UpdateUserData = {
-      id: props.user.id,
+    const userData: Partial<UpdateUserData> = {
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
       phone: phone.value,
       address: address.value,
-      role: role.value as 'admin' | 'user' | 'moderator',
+      role: role.value as 'ADMIN' | 'USER' | 'MODERATOR',
       status: status.value as 'active' | 'inactive'
     }
     
@@ -118,9 +115,20 @@ const onSubmit = handleSubmit(async (formValues) => {
       userData.password = password.value
     }
     
-    emit('updated', userData)
-  } catch (error) {
+    // Call the actual API service
+    const response = await apiService.updateUser(props.user.id, userData)
+    
+    if (response.success && response.data) {
+      // Emit the updated user data
+      emit('updated', response.data.user)
+      closeModal()
+    } else {
+      throw new Error(response.message || 'Failed to update user')
+    }
+  } catch (error: any) {
     console.error('Error updating user:', error)
+    // You might want to show a toast notification or error message here
+    alert(error.message || 'Failed to update user. Please try again.')
   } finally {
     isLoading.value = false
   }

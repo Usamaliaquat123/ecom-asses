@@ -65,11 +65,19 @@ const router = createRouter({
 })
 
 // Navigation guards
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   
   // Update document title
   document.title = `${to.meta.title} - Admin Panel`
+  
+  // Initialize auth if not already done and token exists
+  const token = localStorage.getItem('auth_token')
+  if (token && !authStore.user) {
+    // Initialize auth in background, but don't wait for it to complete
+    // The token existence is enough for immediate redirect
+    authStore.initializeAuth()
+  }
   
   // Check authentication requirements
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {

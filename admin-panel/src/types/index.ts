@@ -5,7 +5,7 @@ export interface User {
   lastName: string
   phone?: string
   address?: string
-  role: 'admin' | 'moderator' | 'user'
+  role: 'ADMIN' | 'MODERATOR' | 'USER'
   permissions: string[]
   avatar?: string
   isActive: boolean
@@ -20,7 +20,7 @@ export interface CreateUserData {
   lastName: string
   phone: string
   address: string
-  role: 'admin' | 'moderator' | 'user'
+  role: 'ADMIN' | 'MODERATOR' | 'USER'
   password: string
 }
 

@@ -19,29 +19,29 @@ const props = withDefaults(defineProps<Props>(), {
 const colorClasses = computed(() => {
   const colors = {
     blue: {
-      bg: 'bg-blue-100',
-      text: 'text-blue-600',
-      icon: 'text-blue-500'
+      bg: 'bg-blue-100 dark:bg-blue-900/30',
+      text: 'text-blue-600 dark:text-blue-400',
+      icon: 'text-blue-500 dark:text-blue-400'
     },
     green: {
-      bg: 'bg-green-100',
-      text: 'text-green-600',
-      icon: 'text-green-500'
+      bg: 'bg-green-100 dark:bg-green-900/30',
+      text: 'text-green-600 dark:text-green-400',
+      icon: 'text-green-500 dark:text-green-400'
     },
     purple: {
-      bg: 'bg-purple-100',
-      text: 'text-purple-600',
-      icon: 'text-purple-500'
+      bg: 'bg-purple-100 dark:bg-purple-900/30',
+      text: 'text-purple-600 dark:text-purple-400',
+      icon: 'text-purple-500 dark:text-purple-400'
     },
     orange: {
-      bg: 'bg-orange-100',
-      text: 'text-orange-600',
-      icon: 'text-orange-500'
+      bg: 'bg-orange-100 dark:bg-orange-900/30',
+      text: 'text-orange-600 dark:text-orange-400',
+      icon: 'text-orange-500 dark:text-orange-400'
     },
     red: {
-      bg: 'bg-red-100',
-      text: 'text-red-600',
-      icon: 'text-red-500'
+      bg: 'bg-red-100 dark:bg-red-900/30',
+      text: 'text-red-600 dark:text-red-400',
+      icon: 'text-red-500 dark:text-red-400'
     }
   }
   return colors[props.color]
@@ -49,9 +49,9 @@ const colorClasses = computed(() => {
 
 const changeClasses = computed(() => {
   return {
-    positive: 'text-green-600',
-    negative: 'text-red-600',
-    neutral: 'text-gray-600'
+    positive: 'text-green-600 dark:text-green-400',
+    negative: 'text-red-600 dark:text-red-400',
+    neutral: 'text-gray-600 dark:text-gray-400'
   }[props.changeType]
 })
 
@@ -61,20 +61,20 @@ const TrendIcon = computed(() => {
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow duration-200">
     <div class="flex items-center justify-between">
       <div class="flex-1">
-        <p class="text-sm font-medium text-gray-600 mb-1">{{ title }}</p>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{{ title }}</p>
         <div v-if="loading" class="animate-pulse">
-          <div class="h-8 bg-gray-200 rounded w-20 mb-2"></div>
-          <div class="h-4 bg-gray-200 rounded w-16"></div>
+          <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-2"></div>
+          <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
         </div>
         <div v-else>
-          <p class="text-3xl font-bold text-gray-900 mb-2">{{ value }}</p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ value }}</p>
           <div class="flex items-center">
             <TrendIcon :class="['w-4 h-4 mr-1', changeClasses]" />
             <span :class="['text-sm font-medium', changeClasses]">{{ change }}</span>
-            <span class="text-sm text-gray-500 ml-1">vs last month</span>
+            <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">vs last month</span>
           </div>
         </div>
       </div>

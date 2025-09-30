@@ -100,10 +100,10 @@ onMounted(async () => {
 
 const getActivityColor = (type: string) => {
   const colors = {
-    create: 'bg-green-100 text-green-800',
-    update: 'bg-blue-100 text-blue-800',
-    delete: 'bg-red-100 text-red-800',
-    system: 'bg-gray-100 text-gray-800'
+    create: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',
+    update: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300',
+    delete: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
+    system: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
   }
   return colors[type as keyof typeof colors] || colors.system
 }
@@ -128,8 +128,8 @@ const exportData = () => {
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">Analytics & Reports</h1>
-        <p class="mt-1 text-sm text-gray-500">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Analytics & Reports</h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Monitor system usage and user activity
         </p>
       </div>
@@ -157,39 +157,39 @@ const exportData = () => {
       <div
         v-for="stat in stats"
         :key="stat.title"
-        class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200"
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow duration-200"
       >
         <div class="flex items-center justify-between">
           <div class="flex-1">
-            <p class="text-sm font-medium text-gray-600 mb-1">{{ stat.title }}</p>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{{ stat.title }}</p>
             <div v-if="isLoading" class="animate-pulse">
-              <div class="h-8 bg-gray-200 rounded w-20 mb-2"></div>
-              <div class="h-4 bg-gray-200 rounded w-16"></div>
+              <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-2"></div>
+              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
             </div>
             <div v-else>
-              <p class="text-3xl font-bold text-gray-900 mb-2">{{ stat.value }}</p>
+              <p class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ stat.value }}</p>
               <div class="flex items-center">
                 <TrendingUp :class="['w-4 h-4 mr-1', stat.changeType === 'positive' ? 'text-green-500' : 'text-red-500']" />
                 <span :class="['text-sm font-medium', stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600']">
                   {{ stat.change }}
                 </span>
-                <span class="text-sm text-gray-500 ml-1">vs last period</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">vs last period</span>
               </div>
             </div>
           </div>
           <div :class="[
             'w-12 h-12 rounded-xl flex items-center justify-center',
-            stat.color === 'blue' ? 'bg-blue-100' :
-            stat.color === 'green' ? 'bg-green-100' :
-            stat.color === 'purple' ? 'bg-purple-100' : 'bg-orange-100'
+            stat.color === 'blue' ? 'bg-blue-100 dark:bg-blue-900/30' :
+            stat.color === 'green' ? 'bg-green-100 dark:bg-green-900/30' :
+            stat.color === 'purple' ? 'bg-purple-100 dark:bg-purple-900/30' : 'bg-orange-100 dark:bg-orange-900/30'
           ]">
             <component 
               :is="stat.icon" 
               :class="[
                 'w-6 h-6',
-                stat.color === 'blue' ? 'text-blue-600' :
-                stat.color === 'green' ? 'text-green-600' :
-                stat.color === 'purple' ? 'text-purple-600' : 'text-orange-600'
+                stat.color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
+                stat.color === 'green' ? 'text-green-600 dark:text-green-400' :
+                stat.color === 'purple' ? 'text-purple-600 dark:text-purple-400' : 'text-orange-600 dark:text-orange-400'
               ]" 
             />
           </div>
@@ -199,18 +199,18 @@ const exportData = () => {
 
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-gray-900">User Activity Trend</h3>
-          <Calendar class="w-5 h-5 text-gray-400" />
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">User Activity Trend</h3>
+          <Calendar class="w-5 h-5 text-gray-400 dark:text-gray-500" />
         </div>
         <UserChart />
       </div>
       
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-gray-900">Session Distribution</h3>
-          <Activity class="w-5 h-5 text-gray-400" />
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Session Distribution</h3>
+          <Activity class="w-5 h-5 text-gray-400 dark:text-gray-500" />
         </div>
         <ActivityChart />
       </div>
@@ -219,26 +219,26 @@ const exportData = () => {
     <!-- Detailed Analytics -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Top Pages -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6">Top Pages</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Top Pages</h3>
         <div class="space-y-4">
           <div
             v-for="page in topPages"
             :key="page.path"
-            class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+            class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
           >
             <div class="flex-1">
-              <p class="text-sm font-medium text-gray-900">{{ page.path }}</p>
-              <p class="text-xs text-gray-500">{{ page.views.toLocaleString() }} views</p>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">{{ page.path }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">{{ page.views.toLocaleString() }} views</p>
             </div>
             <div class="flex items-center space-x-3">
-              <div class="w-24 bg-gray-200 rounded-full h-2">
+              <div class="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div 
-                  class="bg-purple-600 h-2 rounded-full" 
+                  class="bg-purple-600 dark:bg-purple-400 h-2 rounded-full" 
                   :style="{ width: `${page.percentage}%` }"
                 ></div>
               </div>
-              <span class="text-sm font-medium text-gray-900 w-12 text-right">
+              <span class="text-sm font-medium text-gray-900 dark:text-white w-12 text-right">
                 {{ page.percentage }}%
               </span>
             </div>
@@ -247,8 +247,8 @@ const exportData = () => {
       </div>
 
       <!-- Recent Activity -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6">Recent Activity</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Recent Activity</h3>
         <div class="space-y-4">
           <div
             v-for="activity in recentActivity"
@@ -259,17 +259,17 @@ const exportData = () => {
               {{ getActivityIcon(activity.type) }}
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm text-gray-900">
+              <p class="text-sm text-gray-900 dark:text-white">
                 <span class="font-medium">{{ activity.user }}</span>
                 {{ activity.action.toLowerCase() }}
                 <span class="font-medium">{{ activity.target }}</span>
               </p>
-              <p class="text-xs text-gray-500">{{ activity.timestamp }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">{{ activity.timestamp }}</p>
             </div>
           </div>
         </div>
         <div class="mt-6">
-          <button class="text-sm text-purple-600 hover:text-purple-700 font-medium">
+          <button class="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
             View all activity
           </button>
         </div>
@@ -277,29 +277,29 @@ const exportData = () => {
     </div>
 
     <!-- Performance Metrics -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-6">System Performance</h3>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">System Performance</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="text-center">
-          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Activity class="w-8 h-8 text-green-600" />
+          <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Activity class="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
-          <p class="text-2xl font-bold text-gray-900">99.9%</p>
-          <p class="text-sm text-gray-500">Uptime</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white">99.9%</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Uptime</p>
         </div>
         <div class="text-center">
-          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <TrendingUp class="w-8 h-8 text-blue-600" />
+          <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+            <TrendingUp class="w-8 h-8 text-blue-600 dark:text-blue-400" />
           </div>
-          <p class="text-2xl font-bold text-gray-900">1.2s</p>
-          <p class="text-sm text-gray-500">Avg Response Time</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white">1.2s</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Avg Response Time</p>
         </div>
         <div class="text-center">
-          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <BarChart3 class="w-8 h-8 text-purple-600" />
+          <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+            <BarChart3 class="w-8 h-8 text-purple-600 dark:text-purple-400" />
           </div>
-          <p class="text-2xl font-bold text-gray-900">45GB</p>
-          <p class="text-sm text-gray-500">Data Processed</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white">45GB</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Data Processed</p>
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ const closeSidebar = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 lg:flex">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 lg:flex">
     <!-- Mobile sidebar overlay -->
     <div 
       v-if="sidebarOpen" 
@@ -29,7 +29,7 @@ const closeSidebar = () => {
     <!-- Sidebar -->
     <div 
       :class="[
-        'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex-shrink-0',
+        'fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex-shrink-0',
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       ]"
     >
